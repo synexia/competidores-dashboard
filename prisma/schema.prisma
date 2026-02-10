@@ -1,0 +1,38 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model StationConfig {
+  idestacion  String   @id
+  displayName String?
+  zona        String?
+  propia      Boolean  @default(false)
+  isVisible   Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  prices StationPricesLatest?
+}
+
+model StationPricesLatest {
+  idestacion       String   @id
+  gasolina95       Decimal? @db.Decimal(10, 4)
+  gasolina98       Decimal? @db.Decimal(10, 4)
+  gasoleo          Decimal? @db.Decimal(10, 4)
+  gasoleoPremium   Decimal? @db.Decimal(10, 4)
+  glp              Decimal? @db.Decimal(10, 4)
+  dif95            Decimal? @db.Decimal(10, 4)
+  dif98            Decimal? @db.Decimal(10, 4)
+  difGasoleo       Decimal? @db.Decimal(10, 4)
+  difGasoleoPremium Decimal? @db.Decimal(10, 4)
+  difGlp           Decimal? @db.Decimal(10, 4)
+  updatedAt        DateTime @updatedAt
+
+  station StationConfig @relation(fields: [idestacion], references: [idestacion])
+}
